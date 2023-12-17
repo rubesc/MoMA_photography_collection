@@ -1,6 +1,6 @@
 # MoMA Data Visualizations with D3.js
 
-This repository contains D3.js data visualizations that explore the Museum of Modern Art's (MoMA) public dataset on Artists and Collection.
+This repository contains D3.js data visualizations that explore the Museum of Modern Art's (MoMA) public dataset on Artists and Collection, with a focus in their Photography collection.
 
 ## Data Source
 
