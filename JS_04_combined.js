@@ -27,30 +27,38 @@ d3.csv('./clean_data/20231119_moma_acquired_by_year.csv').then(function(data) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // Create the bars
+  // Create the bars with animation
   svg0.selectAll("rect")
     .data(data)
     .enter()
     .append("rect")
     .attr("x", d => xScale0(d.year_acquired))
+    .attr("y", height)
+    .attr("width", width / data.length) 
+    .attr("height", 0)
+    .attr("fill", "pink")
+    .transition()
+    .duration(500)
+    .delay((d, i) => i * 100)
     .attr("y", d => yScale0(d.is_photog))
-    .attr("width", width / data.length) // Adjust width based on data length
-    .attr("height", d => height - yScale0(d.is_photog))
-    .attr("fill", "pink");
+    .attr("height", d => height - yScale0(d.is_photog));
 
-  // Add the x-axis
+  // Add the x-axis with animation
   svg0.append('g')
     .attr('transform', `translate(0,${height})`)
     .call(d3.axisBottom(xScale0))
-    .style("font-size", "8px");
+    .style("font-size", "8px")
+    .transition()
+    .duration(1000);
 
-  // Add the y-axis
+  // Add the y-axis with animation
   svg0.append('g')
     .call(d3.axisLeft(yScale0))
-    .style("font-size", "8px");
- 
+    .style("font-size", "8px")
+    .transition()
+    .duration(1000);
 
-  // Add the y-axis label
+  // Add the y-axis label with animation
   svg0.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
@@ -58,53 +66,60 @@ d3.csv('./clean_data/20231119_moma_acquired_by_year.csv').then(function(data) {
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .style("font-size", "10px")
-    .text("# photographic artwork acquired");
+    .text("# photographic artwork acquired")
+    .transition()
+    .duration(1000);
 
-// Add a callout box for the year 1968
-const calloutYear = 1968;
-const calloutData = data.find(d => d.year_acquired.getFullYear() === calloutYear);
+  // Add a callout box for the year 1968 with animation
+  const calloutYear = 1968;
+  const calloutData = data.find(d => d.year_acquired.getFullYear() === calloutYear);
 
-if (calloutData) {
-  const calloutBox = svg0.append('foreignObject')
-    .attr("x", xScale0(calloutData.year_acquired) + 40) // Adjust position
-    .attr("y", yScale0(calloutData.is_photog) - 250) // Adjust position
-    .attr("width", 110) 
-    .attr("height", 50) 
-    .append('xhtml:div')
-    .style('font-size', '8px')
-    .style('background-color', 'white')
-    .style('border', '1px solid white')
-    .html(`In 1968, MoMA acquired close to 5,000 images from the French Photographer Eugene Atgét's archive.`);
-    
+  if (calloutData) {
+    const calloutBox = svg0.append('foreignObject')
+      .attr("x", xScale0(calloutData.year_acquired) + 40) 
+      .attr("y", yScale0(calloutData.is_photog) - 250) 
+      .attr("width", 110)
+      .attr("height", 50)
+      .append('xhtml:div')
+      .style('font-size', '8px')
+      .style('background-color', 'white')
+      .style('border', '1px solid white')
+      .html(`In 1968, MoMA acquired close to 5,000 images from the French Photographer Eugene Atgét's archive.`)
+      .transition()
+      .duration(1000);
 
-  // Add an arrow
-  const arrowLength = 20;
-  svg0.append('line')
-    .attr('x1', xScale0(calloutData.year_acquired) +40) // Adjust position
-    .attr('y1', yScale0(calloutData.is_photog) - 230) // Adjust position
-    .attr('x2', xScale0(calloutData.year_acquired))
-    .attr('y2', yScale0(calloutData.is_photog) - 230) // Adjust position
-    .attr('stroke', 'grey');
+    // Add an arrow 
+    const arrowLength = 20;
+    svg0.append('line')
+      .attr('x1', xScale0(calloutData.year_acquired) + 40) 
+      .attr('y1', yScale0(calloutData.is_photog) - 230) 
+      .attr('x2', xScale0(calloutData.year_acquired))
+      .attr('y2', yScale0(calloutData.is_photog) - 230) 
+      .attr('stroke', 'grey')
+      .transition()
+      .duration(1000);
 
-  // Add a triangular arrowhead
-  svg0.append('polygon')
-  .attr('points', `${xScale0(calloutData.year_acquired) + 5},${yScale0(calloutData.is_photog) - 235} 
+    // Add a triangular arrowhead 
+    svg0.append('polygon')
+      .attr('points', `${xScale0(calloutData.year_acquired) + 5},${yScale0(calloutData.is_photog) - 235} 
                     ${xScale0(calloutData.year_acquired) + 5},${yScale0(calloutData.is_photog) - 225} 
                     ${xScale0(calloutData.year_acquired) + 0},${yScale0(calloutData.is_photog) - 230}`)
-  .style('fill', 'grey');
+      .style('fill', 'grey')
+      .transition()
+      .duration(1000);
 
-
- // Add an image thumbnail
- const thumbnailWidth = 120;
- const thumbnailHeight = 120;
- svg0.append('image')
-   .attr('x', xScale0(calloutData.year_acquired) + 150) // Adjust position
-   .attr('y', yScale0(calloutData.is_photog) - 300) // Adjust position
-   .attr('width', thumbnailWidth)
-   .attr('height', thumbnailHeight)
-   .attr('xlink:href', 'media/eugene_image.jpeg');
-
-}
+    // Add an image thumbnail 
+    const thumbnailWidth = 120;
+    const thumbnailHeight = 120;
+    svg0.append('image')
+      .attr('x', xScale0(calloutData.year_acquired) + 150) 
+      .attr('y', yScale0(calloutData.is_photog) - 300) 
+      .attr('width', thumbnailWidth)
+      .attr('height', thumbnailHeight)
+      .attr('xlink:href', 'media/eugene_image.jpeg')
+      .transition()
+      .duration(1000);
+  }
 
 });
 
@@ -119,9 +134,9 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data1) 
 
   // SCALES
   const xScale1 = d3.scaleBand() // Use scaleBand for discrete values (years)
-    .domain(data1.map(d => d.year_acquired.getFullYear())) // Extract the year part
+    .domain(data1.map(d => d.year_acquired.getFullYear())) 
     .range([0, width])
-    .padding(0.1); // Adjust padding as needed
+    .padding(0.1); 
 
   const yScale1 = d3.scaleLinear()
     .domain([0, d3.max(data1, d => d.photogrpahy_artist)])
@@ -146,28 +161,27 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data1) 
     .attr("height", d => height - yScale1(d.photogrpahy_artist))
     .attr("fill", "pink");
 
-  // Add the x-axis
- // Add the x-axis with custom tick format
+  // x-axis
   svg1.append('g')
     .attr('transform', `translate(0,${height})`)
     .call(d3.axisBottom(xScale1)
       .tickFormat(d => {
         const year = +d;
-        return year % 10 === 0 ? year : ''; // Show only decades
+        return year % 10 === 0 ? year : ''; 
       })
     )
     .selectAll("text")
     .style("text-anchor", "end")
     .attr("dx", "-0.8em")
     .attr("dy", "0.8em")
-    .style("font-size", "8px"); // Adjust font size as needed
+    .style("font-size", "8px"); 
 
-  // Add the y-axis
+  // y-axis
   svg1.append('g')
     .call(d3.axisLeft(yScale1))
     .style("font-size", "8px");
 
-  // Add the y-axis label
+  // y-axis label
   svg1.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
@@ -207,12 +221,11 @@ d3.csv('./clean_data/20231119_moma_acquired_by_year.csv').then(function(data3) {
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-// Add light grey background
+  // Add light grey background
   svg3.append('rect')
     .attr('width', width)
     .attr('height', height)
-    .attr('fill', '#f0f0f0'); 
-
+    .attr('fill', '#f0f0f0');
 
   // Calculate the rolling 5-year average for percent_photog
   const rollingAverageData = data3.map((d, i, arr) => {
@@ -225,36 +238,48 @@ d3.csv('./clean_data/20231119_moma_acquired_by_year.csv').then(function(data3) {
   const areaGenerator = d3.area()
     .x(d => xScale3(d.year_acquired))
     .y0(height)
-    .y1((d, i) => yScale3(i < 2 ? d.percent_photog : rollingAverageData[i - 2])); // Adjust index for rolling average
+    .y1((d, i) => yScale3(i < 2 ? d.percent_photog : rollingAverageData[i - 2])); 
 
-  // Append the area to the SVG
+  // Append the area to the SVG with animation
   svg3.append('path')
     .datum(data3)
-    .attr('fill', 'lightgray') // Fill color for the rest
-    .attr('d', areaGenerator);
+    .attr('fill', 'lightgray') 
+    .attr('d', areaGenerator)
+    .transition()
+    .duration(1000)
+    .ease(d3.easeLinear);
 
   // Create a second area for the "is_photog" percentage
   const areaPhotog = d3.area()
     .x(d => xScale3(d.year_acquired))
     .y0(height)
-    .y1((d, i) => yScale3(i < 2 ? d.percent_photog : rollingAverageData[i - 2])); // Adjust index for rolling average
+    .y1((d, i) => yScale3(i < 2 ? d.percent_photog : rollingAverageData[i - 2])); 
 
-  // Append the area for "is_photog" percentage
+  // Append the area for "is_photog" percentage with animation
   svg3.append('path')
     .datum(data3)
     .attr('fill', 'pink')
-    .attr('d', areaPhotog);
+    .attr('d', areaPhotog)
+    .transition()
+    .duration(1000)
+    .ease(d3.easeLinear);
 
-  // Add the x-axis
+  // Add the x-axis with animation
   svg3.append('g')
     .attr('transform', `translate(0,${height})`)
-    .call(d3.axisBottom(xScale3));
+    .call(d3.axisBottom(xScale3))
+    .transition()
+    .duration(1000)
+    .ease(d3.easeLinear);
 
-  // Add the y-axis
+  // Add the y-axis with animation
   svg3.append('g')
-    .call(d3.axisLeft(yScale3).tickFormat(d3.format('.0%')));
+    .call(d3.axisLeft(yScale3).tickFormat(d3.format('.0%')))
+    .transition()
+    .duration(1000)
+    .ease(d3.easeLinear);
 
-  // Add the y-axis label
+  // Add the y-axis label with animation
   svg3.append("text")
     .attr("transform", "rotate(-90)")
     .attr("y", 0 - margin.left)
@@ -262,30 +287,40 @@ d3.csv('./clean_data/20231119_moma_acquired_by_year.csv').then(function(data3) {
     .attr("dy", "1em")
     .style("text-anchor", "middle")
     .style("font-size", "10px")
-    .text("% MoMA acquisition photography  (5-yr avg)");
+    .text("% MoMA acquisition photography  (5-yr avg)")
+    .transition()
+    .duration(1000)
+    .ease(d3.easeLinear);
 
-
+  // Add the labels with animation
   const labelNonPhotography = svg3.append('text')
     .attr('x', xScale3(data3[data3.length - 1].year_acquired.getFullYear()))
-    .attr('y', yScale3(data3[data3.length - 1].percent_photog))
+    .attr('y', height)
     .attr('dy', -50)
-    .attr('text-anchor', 'start') 
+    .attr('text-anchor', 'start')
     .style('font-size', '8px')
     .style('fill', 'darkgrey')
-    .text('Non-photography acquisitions');  
- 
+    .text('Non-photography acquisitions')
+    .transition()
+    .duration(1000)
+    .delay(500)
+    .ease(d3.easeLinear)
+    .attr('y', yScale3(data3[data3.length - 1].percent_photog));
+
   const labelPhotography = svg3.append('text')
     .attr('x', xScale3(data3[data3.length - 1].year_acquired.getFullYear()))
-    .attr('y', yScale3(data3[data3.length - 1].percent_photog))
+    .attr('y', height)
     .attr('dy', 100)
-    .attr('text-anchor', 'start') 
+    .attr('text-anchor', 'start')
     .style('font-size', '8px')
     .style('fill', 'coral')
-    .text('Photography Acquisition');
-
-
+    .text('Photography Acquisition')
+    .transition()
+    .duration(1000)
+    .delay(500)
+    .ease(d3.easeLinear)
+    .attr('y', yScale3(data3[data3.length - 1].percent_photog));
 });
-
 
 
 
@@ -299,10 +334,10 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
   });
 
   // SCALES
-  const xScale4 = d3.scaleBand() // Use scaleBand for discrete values (years)
-    .domain(data4.map(d => d.year_acquired.getFullYear())) // Extract the year part
+  const xScale4 = d3.scaleBand() 
+    .domain(data4.map(d => d.year_acquired.getFullYear())) 
     .range([0, width])
-    .padding(0.1); // Adjust padding as needed
+    .padding(0.1); 
 
   const yScale4 = d3.scaleLinear()
     .domain([0, d3.max(data4, d => Math.max(d.photogrpahy_artist, d.non_photography_artist))])
@@ -331,7 +366,18 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
     .attr('fill', 'none')
     .attr("stroke", "pink")
     .attr('stroke-width', 3)
-    .attr('d', linePhotography);
+    .attr('d', linePhotography)
+    .attr('stroke-dasharray', function() {
+      const totalLength = this.getTotalLength();
+      return totalLength + " " + totalLength;
+    })
+    .attr('stroke-dashoffset', function() {
+      return this.getTotalLength();
+    })
+    .transition()
+    .duration(2000) 
+    .ease(d3.easeLinear)
+    .attr('stroke-dashoffset', 0);
 
   // Append the non-photography line to the SVG
   svg4.append('path')
@@ -339,7 +385,18 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
     .attr('fill', 'none')
     .attr("stroke", "lightgrey")
     .attr('stroke-width', 1)
-    .attr('d', lineNonPhotography);
+    .attr('d', lineNonPhotography)
+    .attr('stroke-dasharray', function() {
+      const totalLength = this.getTotalLength();
+      return totalLength + " " + totalLength;
+    })
+    .attr('stroke-dashoffset', function() {
+      return this.getTotalLength();
+    })
+    .transition()
+    .duration(2000) 
+    .ease(d3.easeLinear)
+    .attr('stroke-dashoffset', 0);
 
   // Add labels at the end of each line
   const labelPhotography = svg4.append('text')
@@ -349,7 +406,12 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
     .attr('text-anchor', 'start') 
     .style('font-size', '8px')
     .style('fill', 'coral')
-    .text('Photog Artist');
+    .text('Photog Artist')
+    .style("opacity", 0)
+    .transition()
+    .delay(2000)
+    .duration(7000)
+    .style("opacity", 1);
 
   const labelNonPhotography = svg4.append('text')
     .attr('x', xScale4(data4[data4.length - 1].year_acquired.getFullYear()))
@@ -358,7 +420,14 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
     .attr('text-anchor', 'start') 
     .style('font-size', '7px')
     .style('fill', 'darkgrey')
-    .text('Non-photog Artist');
+    .text('Non-photog Artist')
+    .style("opacity", 0)
+    .transition()
+    .delay(2000)
+    .duration(500)
+    .style("opacity", 1);
+
+  // Add the x-axis
 
   // Add the x-axis
   svg4.append('g')
@@ -366,14 +435,14 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
     .call(d3.axisBottom(xScale4)
       .tickFormat(d => {
         const year = +d;
-        return year % 10 === 0 ? year : ''; // Show only decades
+        return year % 10 === 0 ? year : ''; 
       })
     )
     .selectAll("text")
     .style("text-anchor", "end")
     .attr("dx", "-0.8em")
     .attr("dy", "0.8em")
-    .style("font-size", "7px"); // Adjust font size as needed
+    .style("font-size", "7px"); 
 
   // Add the y-axis
   svg4.append('g')
@@ -393,12 +462,13 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
 
 
 
+
 /* Container 5 - Photography medium type */
 // CONSTANTS AND GLOBALS
 const width5 = window.innerWidth * 0.7,
   height5 = window.innerHeight * 0.6,
   margin5 = { top: 70, bottom: 50, left: 300, right: 0 },
-  topItemsCount = 30; // Define the number of top items
+  topItemsCount = 30;
 
 // LOAD DATA
 d3.csv('./clean_data/20231118_photography_medium.csv').then(function(data5) {
@@ -426,7 +496,7 @@ d3.csv('./clean_data/20231118_photography_medium.csv').then(function(data5) {
     .append("g")
     .attr("transform", "translate(" + margin5.left + "," + margin5.top + ")");
 
-  // Create the bars
+  // Create the bars with initial opacity set to 0 for fade-in effect
   svg5.selectAll("rect")
     .data(topData)
     .enter()
@@ -435,7 +505,11 @@ d3.csv('./clean_data/20231118_photography_medium.csv').then(function(data5) {
     .attr("y", d => yScale5(d.Medium))
     .attr("width", d => xScale5(+d.Count))
     .attr("height", yScale5.bandwidth())
-    .attr("fill", "pink");
+    .attr("fill", "pink")
+    .style("opacity", 0) 
+    .transition() 
+    .duration(5000) 
+    .style("opacity", 1); 
 
   // Add the x-axis
   svg5.append('g')
@@ -476,7 +550,7 @@ d3.csv('./clean_data/20231118_photography_medium.csv').then(function(data5) {
 const width6 = window.innerWidth * 0.7,
   height6 = window.innerHeight * 0.6,
   margin6 = { top: 30, bottom: 20, left: 180, right: 10 },
-  topArtistsCount = 40; // Define the number of top artists
+  topArtistsCount = 40; 
 
 // LOAD DATA
 d3.csv('./clean_data/20231118_photographer_summary.csv').then(function(data6) {
@@ -508,16 +582,19 @@ d3.csv('./clean_data/20231118_photographer_summary.csv').then(function(data6) {
     .append("g")
     .attr("transform", "translate(" + margin6.left + "," + margin6.top + ")");
 
-  // Create the bars
+  // Create the bars with initial width set to 0 for animation
   svg6.selectAll("rect")
     .data(topData)
     .enter()
     .append("rect")
     .attr("x", 0)
     .attr("y", d => yScale6(d.Artist))
-    .attr("width", d => xScale6(+d.percent))
+    .attr("width", 0)
     .attr("height", yScale6.bandwidth())
-    .attr("fill", d => colorScale6(d.gender_group));
+    .attr("fill", d => colorScale6(d.gender_group))
+    .transition() 
+    .duration(4000) 
+    .attr("width", d => xScale6(+d.percent));
 
   // Add the x-axis with pretty percentage formatting
   svg6.append('g')
@@ -536,7 +613,7 @@ d3.csv('./clean_data/20231118_photographer_summary.csv').then(function(data6) {
     .attr("x", width6 / 2)
     .attr("y", height6 + margin6.top)
     .attr("text-anchor", "middle")
-    .style("font-size", "7x")
+    .style("font-size", "7px")
     .text("Percentage");
 
   // Add the y-axis label
@@ -574,17 +651,19 @@ d3.csv('./clean_data/20231118_photographer_summary.csv').then(function(data6) {
 });
 
 
+
 /* Container 7 - Top Photographer countries in MoMA collection */
 // CONSTANTS AND GLOBALS
 const width7 = window.innerWidth * 0.7,
   height7 = window.innerHeight * 0.6,
   margin7 = { top: 70, bottom: 50, left: 80, right: 10 },
-  topCountriesCount = 20; // Define the number of top countries
+  topCountriesCount = 20; 
 
 // LOAD DATA
 d3.csv('./clean_data/20231118_nationality_summary.csv').then(function(data7) {
-  // Sort data by country_photog_work_rank in ascending order
+
   data7.sort((a, b) => d3.ascending(+a.country_photog_work_rank, +b.country_photog_work_rank));
+
 
   // Slice the data to include only the top countries
   const topData = data7.slice(0, topCountriesCount);
@@ -614,9 +693,12 @@ d3.csv('./clean_data/20231118_nationality_summary.csv').then(function(data7) {
     .append("rect")
     .attr("x", 0)
     .attr("y", d => yScale7(d.Nat_clean))
-    .attr("width", d => xScale7(+d.is_photog))
+    .attr("width", 0) 
     .attr("height", yScale7.bandwidth())
-    .attr("fill", "pink"); // Adjust color as needed
+    .attr("fill", "pink") 
+    .transition() 
+    .duration(4000) 
+    .attr("width", d => xScale7(+d.is_photog));
 
   // Add the x-axis
   svg7.append('g')
