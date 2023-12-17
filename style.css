@@ -30,3 +30,9 @@ p {
   max-height: 50px;
   /* Add any other styles as needed */
 }
+
+hr {
+  border: none;
+  height: 2px; /* Adjust the thickness of the line as needed */
+  background-color: pink;
+}

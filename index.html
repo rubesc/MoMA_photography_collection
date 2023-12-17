@@ -15,33 +15,32 @@
 
   <head>
     <meta charset="utf-8">
-    <title>MoMA dataset project</title>
+    <title>MoMA Photography Collection</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
     <link rel="stylesheet" href="./style.css">
 
-    <!-- Wordcloud 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://d3js.org/d3.v7.min.js"></script> -->
-
     <script src="https://d3js.org/d3.v7.min.js"></script>
+
 
   </head>
 
   <body>
-    
-    
-    <!-- Part 1 - Photogrpahy vs. other Medium  -->
+    <hr>
+    <img src="./media/gallery_wall_9.png" height="180" >  
+    <img src="./media/gallery_wall_1.png" height="180" >  
+    <img src="./media/gallery_wall_9.png" height="180" >   
+    <hr>
+
+    <!-- Title  -->
       <h1> MoMA Photography Collection</h1>
       <h6> By RC</h6>
- 
-      
       <br>
+      
   
 
-      <!-- Purchase overtime  -->
+    <!-- Purchase overtime  -->
       <h2> Acqusition history: Photography vs. non-photography  </h2>
-      
+
       <p> Photography, as a form of fine art, emerges relatively recently compared to traditional mediums like paintings and sculptures. 
         There's an enduring struggle for artistic recognition by photographers throughout the centuries. 
         Only in the mid-19th century did photography begin to be acknowledged as an aesthetic medium, by some.  
@@ -49,60 +48,76 @@
       </p>
       <p> On average, photography represents less than 30% of all of MoMA's acquisition.
       </p>
-      <!-- D3.js graph - photo acquired over years -->
       <div id="container3"></div>
+      <hr>
 
+   <!-- Photography Acquisition Vol  -->
+      <h2> Photography Acqusition Volume Trends </h2>  
 
-    <h2> Photography Acqusition Volume Trends </h2>  
-    <p> How does ~30% of all acquisition translate into volume of purchase? It appears there's been a very slow growth with a handful of outlier years. For photography, the acquisition volume hovers around 200-400 per year.
-      After the 90's, it jumps between 500 and 1,300 per year. There's one particular outlier year, 1968. That year MoMA purchased close to 5,000 items from French photographer Eugene Atgét's archive. Below, you can see an image from Atgét, "Eclipse", taken in 1911.
-    </p>
-      <!--  D3.js graph - % acquisition is photography -->
-      <div id="container0"></div>
+      <p> How does ~30% of all acquisition translate into volume of purchase? It appears there's been a very slow growth with a handful of outlier years. For photography, the acquisition volume hovers around 200-400 per year.
+        After the 90's, it jumps between 500 and 1,300 per year. There's one particular outlier year, 1968. That year MoMA purchased close to 5,000 items from French photographer Eugene Atgét's archive. Below, you can see an image from Atgét, "Eclipse", taken in 1911.
+      </p>
 
-    <h2> Number of artist that are part of MoMA's collection</h2>  
+     <div id="container0"></div>
+     <hr>
+
+    <!-- Unique artist acquired every years -->  
+      <h2> Number of artist that are part of MoMA's collection</h2>  
+
       <p>  When looking at # of unique artist with work acquired each year, as opposed to number of art work, 
         we see that around 200-600 unique non-photography artists have work acquired by MoMA in recent year. 
         For photography, around 50-100 unique artists had MoMA acquired their work since 2010.
       </p>
-       <!--  D3.js graph - unique artist acquired every years -->
-       <div id="container4"></div>
-      
 
+      <div id="container4"></div>
+      <hr>
 
-    <h2> Top mediums of MoMA's photography collection</h2>  
+    <!-- Top Photog medium -->
+      <h2> Top mediums of MoMA's photography collection</h2>  
+
       <p> Of the 134,166 artwork in the MoMA collection (as of 2020), 
         33,446 are classified as Photography. Let's take a look of these 33K photographic work.
        As we can see, the "medium" data is not normalised in the MoMA dataset. For example, there are many variations of the same medium type, and some are also listed in different languages.
         However, if we observe the top 30 mediums, we saw that most of them represents tranditional dark-room printing method (e.g. Gelatin silver  prints).
       </p>
-      <!--  D3.js graph - Top Photog medium -->
+
       <div id="container5"></div>
+      <hr>
 
+    <!-- Top Photography Artist  -->
+    <h2>  Top Photography Artists in the MoMA collection </h2>
+    <p> Let's take a look of top photography artists and what's the share of MoMA's photography collection.
+      As we've seen earlier, French photographer Eugene Atgét continues to stand out as an outlier.
+      His work represents over 40% of MoMA's photography collection! As we go down the list to observe the top 40 photography artist, 
+      we saw that most of them are male artist. It isn't until 19th and 20th where we started seeing female represntation (Berenice Abbott and Dorothea Lange). 
+      We also notice that the 3rd most frequent artist is "unidentified photographer".
+    </p>
+    <div id="container6"></div>
+    <hr>
 
-      <!-- Size  -->
-      <h2> Size and orientation of the photography collection </h2>
+    <!-- Top Photography Artist Country  -->
+    <h2>  Top photography artist countries in the MoMA collection </h2>
+    <p> When observing country represntation, we see that French, American, and British dominate, followed by "n/a".
+      It is also worth noting that western and global north countries dominate this list, 
+      with the exception of Japan taking the 4th position (when excluding n/a).
+      Otherwise, Mexico and Peru are the only two other global south representing countries showing up in the Top 20 rank. 
+    </p>
+    <div id="container7"></div>
 
-      
-      
-
-      
-      
-
-      <br>
-      
-
-      <img src="./media/gallery_wall_6.png" height="180" > 
-      <img src="./media/gallery_wall_7.png" height="180" >  
-      
-      <!-- <img src="./media/gallery_wall_9.png" height="180" >  
-      <img src="./media/gallery_wall_1.png" height="180" >   -->
+  
 
     <br>
-    <br>
-    <h6> Data Source: https://github.com/MuseumofModernArt/collection</h6>
-    <h6> About this data: MoMA is committed to helping everyone understand, enjoy, and use our collection. The Museum’s website features 98,361 artworks from 27,140 artists. This research dataset contains 140,848 records, representing all of the works that have been accessioned into MoMA’s collection and cataloged in our database. It includes basic metadata for each work, including title, artist, date made, medium, dimensions, and date acquired by the Museum. Some of these records have incomplete information and are noted as “not Curator Approved.</h6>
+  
+    <hr>
+    <img src="./media/gallery_wall_6.png" height="180" > 
+    <img src="./media/gallery_wall_7.png" height="180" > 
+    <img src="./media/gallery_wall_6.png" height="180" >  
+    <hr>
 
+
+    <h6>Data Source: <a href="https://github.com/MuseumofModernArt/collection" target="_blank">MoMA Collection GitHub</a></h6>
+    <h5> About this data: MoMA is committed to helping everyone understand, enjoy, and use our collection. The Museum’s website features 98,361 artworks from 27,140 artists. This research dataset contains 140,848 records, representing all of the works that have been accessioned into MoMA’s collection and cataloged in our database. It includes basic metadata for each work, including title, artist, date made, medium, dimensions, and date acquired by the Museum. Some of these records have incomplete information and are noted as “not Curator Approved.</h5>
+    
 
     <script src="JS_04_combined.js"> </script>
 

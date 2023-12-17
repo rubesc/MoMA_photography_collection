@@ -397,7 +397,7 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
 // CONSTANTS AND GLOBALS
 const width5 = window.innerWidth * 0.7,
   height5 = window.innerHeight * 0.6,
-  margin5 = { top: 70, bottom: 50, left: 320, right: 10 },
+  margin5 = { top: 70, bottom: 50, left: 300, right: 0 },
   topItemsCount = 30; // Define the number of top items
 
 // LOAD DATA
@@ -454,7 +454,7 @@ d3.csv('./clean_data/20231118_photography_medium.csv').then(function(data5) {
     .attr("x", width5 / 2)
     .attr("y", height5 + margin5.top)
     .attr("text-anchor", "middle")
-    .style("font-size", "8px")
+    .style("font-size", "7px")
     .text("Count");
 
   // Add the y-axis label
@@ -464,6 +464,190 @@ d3.csv('./clean_data/20231118_photography_medium.csv').then(function(data5) {
     .attr("x", 0 - height5 / 2)
     .attr("dy", "1em")
     .style("text-anchor", "middle")
-    .style("font-size", "8px")
+    .style("font-size", "7px")
     .text("(Top 30 Photography Mediums)");
 });
+
+
+
+/* Container 6 - Top Photographers and gender in MoMA collection */
+
+// CONSTANTS AND GLOBALS
+const width6 = window.innerWidth * 0.7,
+  height6 = window.innerHeight * 0.6,
+  margin6 = { top: 30, bottom: 20, left: 180, right: 10 },
+  topArtistsCount = 40; // Define the number of top artists
+
+// LOAD DATA
+d3.csv('./clean_data/20231118_photographer_summary.csv').then(function(data6) {
+  // Sort data by percent in descending order
+  data6.sort((a, b) => d3.descending(+a.percent, +b.percent));
+
+  // Slice the data to include only the top artists
+  const topData = data6.slice(0, topArtistsCount);
+
+  // SCALES
+  const xScale6 = d3.scaleLinear()
+    .domain([0, d3.max(topData, d => +d.percent)])
+    .range([0, width6 - margin6.left - margin6.right]);
+
+  const yScale6 = d3.scaleBand()
+    .domain(topData.map(d => d.Artist))
+    .range([0, height6])
+    .padding(0.1);
+
+  const colorScale6 = d3.scaleOrdinal()
+    .domain(topData.map(d => d.gender_group))
+    .range(["cadetblue", "lightgrey", "coral"]);
+
+  // CREATE SVG ELEMENT
+  const svg6 = d3.select("#container6")
+    .append("svg")
+    .attr("width", width6 + margin6.left + margin6.right)
+    .attr("height", height6 + margin6.top + margin6.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin6.left + "," + margin6.top + ")");
+
+  // Create the bars
+  svg6.selectAll("rect")
+    .data(topData)
+    .enter()
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", d => yScale6(d.Artist))
+    .attr("width", d => xScale6(+d.percent))
+    .attr("height", yScale6.bandwidth())
+    .attr("fill", d => colorScale6(d.gender_group));
+
+  // Add the x-axis with pretty percentage formatting
+  svg6.append('g')
+    .attr('transform', `translate(0,${height6})`)
+    .call(d3.axisBottom(xScale6).tickFormat(d3.format(".0%")));
+
+  // Add the y-axis
+  svg6.append('g')
+    .call(d3.axisLeft(yScale6))
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-0.5em");
+
+  // Add the x-axis label
+  svg6.append("text")
+    .attr("x", width6 / 2)
+    .attr("y", height6 + margin6.top)
+    .attr("text-anchor", "middle")
+    .style("font-size", "7x")
+    .text("Percentage");
+
+  // Add the y-axis label
+  svg6.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin6.left)
+    .attr("x", 0 - height6 / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("font-size", "7px")
+    .text("(Top Photographers)");
+
+  // Add legend to the bottom inner right corner with smaller text
+  const legend = svg6.append("g")
+    .attr("transform", "translate(" + (width6 - 250) + "," + (height6 + margin6.top - 100) + ")");
+
+  legend.selectAll("rect")
+    .data(colorScale6.domain())
+    .enter()
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", (d, i) => i * 15)
+    .attr("width", 10)
+    .attr("height", 10)
+    .attr("fill", colorScale6);
+
+  legend.selectAll("text")
+    .data(colorScale6.domain())
+    .enter()
+    .append("text")
+    .attr("x", 15)
+    .attr("y", (d, i) => i * 15 + 9)
+    .style("font-size", "8px")
+    .text(d => d);
+});
+
+
+/* Container 7 - Top Photographer countries in MoMA collection */
+// CONSTANTS AND GLOBALS
+const width7 = window.innerWidth * 0.7,
+  height7 = window.innerHeight * 0.6,
+  margin7 = { top: 70, bottom: 50, left: 80, right: 10 },
+  topCountriesCount = 20; // Define the number of top countries
+
+// LOAD DATA
+d3.csv('./clean_data/20231118_nationality_summary.csv').then(function(data7) {
+  // Sort data by country_photog_work_rank in ascending order
+  data7.sort((a, b) => d3.ascending(+a.country_photog_work_rank, +b.country_photog_work_rank));
+
+  // Slice the data to include only the top countries
+  const topData = data7.slice(0, topCountriesCount);
+
+  // SCALES
+  const xScale7 = d3.scaleLinear()
+    .domain([0, d3.max(topData, d => +d.is_photog)])
+    .range([0, width7 - margin7.left - margin7.right]);
+
+  const yScale7 = d3.scaleBand()
+    .domain(topData.map(d => d.Nat_clean))
+    .range([0, height7])
+    .padding(0.1);
+
+  // CREATE SVG ELEMENT
+  const svg7 = d3.select("#container7")
+    .append("svg")
+    .attr("width", width7 + margin7.left + margin7.right)
+    .attr("height", height7 + margin7.top + margin7.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin7.left + "," + margin7.top + ")");
+
+  // Create the bars
+  svg7.selectAll("rect")
+    .data(topData)
+    .enter()
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", d => yScale7(d.Nat_clean))
+    .attr("width", d => xScale7(+d.is_photog))
+    .attr("height", yScale7.bandwidth())
+    .attr("fill", "pink"); // Adjust color as needed
+
+  // Add the x-axis
+  svg7.append('g')
+    .attr('transform', `translate(0,${height7})`)
+    .call(d3.axisBottom(xScale7));
+
+  // Add the y-axis
+  svg7.append('g')
+    .call(d3.axisLeft(yScale7))
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-0.5em");
+
+  // Add the x-axis label
+  svg7.append("text")
+    .attr("x", width7 / 2)
+    .attr("y", height7 + margin7.top)
+    .attr("text-anchor", "middle")
+    .style("font-size", "8px")
+    .text("Photographer Works");
+
+  // Add the y-axis label
+  svg7.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin7.left)
+    .attr("x", 0 - height7 / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("font-size", "8px")
+    .text("(Top 20 Countries)");
+
+});
+
+

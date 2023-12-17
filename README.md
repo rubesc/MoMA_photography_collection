@@ -2,6 +2,9 @@
 
 This repository contains D3.js data visualizations that explore the Museum of Modern Art's (MoMA) public dataset on Artists and Collection, with a focus in their Photography collection.
 
+See github page here: https://rubesc.github.io/MoMA_photography_collection/
+
+
 ## Data Source
 
 The data used in these visualizations is sourced from MoMA's official GitHub repository: [MoMA Collection Dataset](https://github.com/MuseumofModernArt/collection)
