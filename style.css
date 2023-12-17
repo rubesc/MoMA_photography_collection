@@ -9,6 +9,12 @@ h1 {
   margin: 0.25em 0;
 }
 
+
+h2 {
+  font-size: 32px;
+  color: rgb(211, 140, 152);
+}
+
 h3 {
   font-size: 2em;
   margin: 0.25em 0;

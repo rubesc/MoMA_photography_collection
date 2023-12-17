@@ -390,3 +390,80 @@ d3.csv('./clean_data/20231119_unique_artist_acquired.csv').then(function(data4) 
     .style("font-size", "10px")
     .text("# Unique Artists with work acquired");
 });
+
+
+
+/* Container 5 - Photography medium type */
+// CONSTANTS AND GLOBALS
+const width5 = window.innerWidth * 0.7,
+  height5 = window.innerHeight * 0.6,
+  margin5 = { top: 70, bottom: 50, left: 320, right: 10 },
+  topItemsCount = 30; // Define the number of top items
+
+// LOAD DATA
+d3.csv('./clean_data/20231118_photography_medium.csv').then(function(data5) {
+  // Sort data by Count in descending order
+  data5.sort((a, b) => d3.descending(+a.Count, +b.Count));
+
+  // Slice the data to include only the top items
+  const topData = data5.slice(0, topItemsCount);
+
+  // SCALES
+  const xScale5 = d3.scaleLinear()
+    .domain([0, d3.max(topData, d => +d.Count)])
+    .range([0, width5 - margin5.left - margin5.right]);
+
+  const yScale5 = d3.scaleBand()
+    .domain(topData.map(d => d.Medium))
+    .range([0, height5])
+    .padding(0.1);
+
+  // CREATE SVG ELEMENT
+  const svg5 = d3.select("#container5")
+    .append("svg")
+    .attr("width", width5 + margin5.left + margin5.right)
+    .attr("height", height5 + margin5.top + margin5.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin5.left + "," + margin5.top + ")");
+
+  // Create the bars
+  svg5.selectAll("rect")
+    .data(topData)
+    .enter()
+    .append("rect")
+    .attr("x", 0)
+    .attr("y", d => yScale5(d.Medium))
+    .attr("width", d => xScale5(+d.Count))
+    .attr("height", yScale5.bandwidth())
+    .attr("fill", "pink");
+
+  // Add the x-axis
+  svg5.append('g')
+    .attr('transform', `translate(0,${height5})`)
+    .call(d3.axisBottom(xScale5));
+
+  // Add the y-axis
+  svg5.append('g')
+    .call(d3.axisLeft(yScale5))
+    .selectAll("text")
+    .style("text-anchor", "end")
+    .attr("dx", "-0.5em");
+
+  // Add the x-axis label
+  svg5.append("text")
+    .attr("x", width5 / 2)
+    .attr("y", height5 + margin5.top)
+    .attr("text-anchor", "middle")
+    .style("font-size", "8px")
+    .text("Count");
+
+  // Add the y-axis label
+  svg5.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin5.left)
+    .attr("x", 0 - height5 / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .style("font-size", "8px")
+    .text("(Top 30 Photography Mediums)");
+});
